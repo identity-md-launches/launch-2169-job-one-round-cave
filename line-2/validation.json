@@ -40,5 +40,15 @@
   "runtime": {
     "python": "3.12.3"
   },
-  "note": "Local checks are contributor observations, not independent certification."
+  "note": "Local checks are contributor observations, not independent certification.",
+  "required_output": {
+    "path": "artifacts/line-2/wall-v2.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "bbfaf918e2d559acacaafc9ff505318aae0120d442cac574ee42d163010692e0",
+    "identical_to_existing_wall": true,
+    "png_chunk_crcs": "pass",
+    "unmet_visual_requirements": []
+  }
 }
