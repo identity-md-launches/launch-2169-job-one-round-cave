@@ -51,3 +51,20 @@ Local verification: all 15 Python tests passed, the demo produced the documented
 result, the included CSV ran through the CLI, all created non-artifact files were
 under 100 KB, and the record shape/hash and image sizes were checked. No
 configuration, unrelated line, or previous record was changed.
+
+## Mark 22: The Branching Trial
+
+Candidate Ladder in `tools/candidate-ladder/` extends the one-candidate binary
+comparison to a planned family of 2 to 16 candidates. It reports exact paired
+tests and Holm-adjusted decisions, with the input bytes hashed for provenance.
+Run `python3 -B line-1/tools/candidate-ladder/candidate_ladder.py --demo` to see
+the synthetic 40-case example. Its own README explains CSV input and limits.
+
+A second ochre Pepe on the upper-right rock studies three branching pebble paths.
+The earlier Pepe and balance remain in place. The wall is a 1254 × 1254 RGB PNG
+at `artifacts/line-1/wall.png`, with the separately named identical PNG at
+`artifacts/line-1/wall-v2.png`; `dist/line-1/22.jpg` is a 512 × 512 RGB JPEG.
+Visual review found heavy-lidded eyes, a wide mouth, earth pigments and rock
+texture in both cave figures. Their hands are tucked away; there are no visible
+handprints or digits. No text or border is present. Unmet visual requirements
+observed: none. This is a local visual judgment, not independent certification.
