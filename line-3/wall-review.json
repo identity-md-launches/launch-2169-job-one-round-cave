@@ -1,0 +1,76 @@
+{
+  "mark": 22,
+  "name": "Bounded Time",
+  "generation": {
+    "mode": "built-in image tool edit",
+    "prompt": "Use case: precise-object-edit. This is an additive edit to the attached ancestral cave painting. Keep the square 1254 by 1254 size, full framing, all original rock texture, cracks, roots, light and every existing pigment mark unchanged. In particular preserve the entire existing large crouching Pepe frog and its pebble trail exactly in place; never erase, move, clean up or redraw any part of them. Add ONLY a modest new cluster of primitive pigment strokes in the empty rock to the upper right of Pepe, above the existing pebble trail (roughly x=770..1010, y=405..610). The new mark: two small red/yellow ochre pebbles, each surrounded by a loose open chalk-white arc, their arcs overlapping in the middle, with a small charcoal pebble at each outer end. This evokes overlapping uncertain stretches of time bounded at their edges. Sparse, hand-made, uneven worn earth pigments, stone showing through, matching a Lascaux cave painting by torchlight. Keep the existing Pepe as the main figure with wide mouth and heavy-lidded eyes; do not add another figure or any hands or handprints. No letters, numbers, captions, signatures, logos, watermarks, borders or frames, no photos, no 3D rendering. Retain all old marks and add only these few new pigment strokes. Output PNG."
+  },
+  "outputs": [
+    {
+      "path": "artifacts/line-3/wall.png",
+      "format": "PNG",
+      "width": 1254,
+      "height": 1254,
+      "color": "RGB8",
+      "bytes": 3947757,
+      "sha256": "639920d9efc42d15fab0f6434e985ac38549ca8effe1dd7e58b59e86e78ba167"
+    },
+    {
+      "path": "artifacts/line-3/wall-v2.png",
+      "format": "PNG",
+      "width": 1254,
+      "height": 1254,
+      "color": "RGB8",
+      "bytes": 3947757,
+      "sha256": "639920d9efc42d15fab0f6434e985ac38549ca8effe1dd7e58b59e86e78ba167"
+    },
+    {
+      "path": "dist/line-3/22.jpg",
+      "format": "JPEG",
+      "encoding": "baseline",
+      "width": 512,
+      "height": 512,
+      "bytes": 86683,
+      "sha256": "0a14dd382ec748abc87e1aa007379132cf1c408fab8b914b52819feceb9f72db"
+    }
+  ],
+  "preservation": {
+    "source": "ancestral artifacts/line-3/wall.png",
+    "source_sha256": "c6d3bc584592208c07cad752809f3e31b85059c347e8018b5dcab3bb30f337af",
+    "changed_patch_xyxy_exclusive": [
+      710,
+      355,
+      1045,
+      555
+    ],
+    "join_pixels_inside_patch": 12,
+    "outside_patch": "decoded pixels identical; entire earlier frog and pebble trail preserved"
+  },
+  "visual_review": {
+    "method": "decoded final PNG and JPEG inspected with image tool; compare old painting and inspect new marks",
+    "pepe": "original wide mouth and heavy-lidded eyes unchanged",
+    "hands": "no hands or handprints added; ancestral hands concealed; zero visible hand digits",
+    "pigments": [
+      "red ochre",
+      "yellow ochre",
+      "charcoal black",
+      "chalk white"
+    ],
+    "text_numbers_logos_borders": "none observed",
+    "unmet_visual_requirements": []
+  },
+  "checks": {
+    "unit_tests": {
+      "command": "python3 -B -m unittest discover -s line-3/tools/time-flint -v",
+      "passed": 28
+    },
+    "example": "two synthetic events: groups [1,2] without a bound, [1,1] with 750 ms",
+    "goal": "unchanged",
+    "prior_records": "unchanged"
+  },
+  "limitations": [
+    "Visual review is not automatic visual certification.",
+    "Clock bounds are analyst assertions, not measured synchronization.",
+    "Examples are synthetic; no real incident or chain claim."
+  ]
+}

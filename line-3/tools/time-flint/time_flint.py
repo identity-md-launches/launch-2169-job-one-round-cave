@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import re
+import stat
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -17,6 +18,12 @@ TEXT = re.compile(
     r"^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?:Z|[+-]\d{2}:\d{2}))(?:\s+|$)(.*)$"
 )
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+MAX_FILE_BYTES = 8 * 1024 * 1024
+MAX_TOTAL_BYTES = 32 * 1024 * 1024
+MAX_LINE_BYTES = 64 * 1024
+MAX_LINES = 100000
+MAX_SOURCES = 64
+MAX_JSON_DEPTH = 64
 DEMO = {
     "service.log": (
         "2026-10-18T10:00:00Z request accepted\n"
@@ -47,6 +54,17 @@ def micros(dt):
     return ((delta.days * 86400 + delta.seconds) * 1000000 + delta.microseconds)
 
 
+MIN_MICROS = micros(datetime.min.replace(tzinfo=timezone.utc))
+MAX_MICROS = micros(datetime.max.replace(tzinfo=timezone.utc))
+
+
+def checked_interval(start, end):
+    """Both endpoints must be printable UTC calendar instants, without clamping."""
+    if not MIN_MICROS <= start < end <= MAX_MICROS:
+        raise TimelineError("UTC interval endpoints must fit calendar years 0001 through 9999")
+    return start, end
+
+
 def utc_text(value):
     dt = EPOCH + timedelta(microseconds=value)
     return dt.isoformat(timespec="microseconds" if dt.microsecond else "seconds").replace("+00:00", "Z")
@@ -62,14 +80,15 @@ def parse_stamp(value):
     if isinstance(value, bool):
         raise TimelineError("boolean is not a timestamp")
     if isinstance(value, int):
-        digits = len(str(abs(value)))
-        if digits == 10:
+        magnitude = abs(value)
+        if 10 ** 9 <= magnitude < 10 ** 10:
             start, width, precision = value * 1000000, 1000000, "second"
-        elif digits == 13:
+        elif 10 ** 12 <= magnitude < 10 ** 13:
             start, width, precision = value * 1000, 1000, "millisecond"
         else:
             raise TimelineError("epoch integer must have 10 seconds or 13 milliseconds digits")
-        return start, start + width, precision
+        start, end = checked_interval(start, start + width)
+        return start, end, precision
     if not isinstance(value, str):
         raise TimelineError("timestamp must be ISO 8601 text or an integer epoch")
     match = ISO.fullmatch(value)
@@ -90,16 +109,41 @@ def parse_stamp(value):
         width, precision = 1000000, "second"
     else:
         width, precision = 60000000, "minute"
-    start = micros(dt)
-    return start, start + width, precision
+    try:
+        start = micros(dt)
+    except OverflowError as exc:
+        raise TimelineError("timestamp converts outside UTC calendar years 0001 through 9999") from exc
+    start, end = checked_interval(start, start + width)
+    return start, end, precision
+
+
+def reject_constant(value):
+    raise TimelineError(f"nonstandard JSON number: {value}")
+
+
+def check_json_depth(value):
+    """Bound structured messages independently of the runtime recursion limit."""
+    pending = [(value, 1)]
+    while pending:
+        item, depth = pending.pop()
+        if isinstance(item, (dict, list)):
+            if depth > MAX_JSON_DEPTH:
+                raise TimelineError(f"JSON containers exceed {MAX_JSON_DEPTH} levels of nesting")
+            children = item.values() if isinstance(item, dict) else item
+            pending.extend((child, depth + 1) for child in children)
 
 
 def parse_line(raw, source, number):
     if raw.lstrip().startswith("{"):
         try:
-            obj = json.loads(raw, object_pairs_hook=unique_object)
+            obj = json.loads(raw, object_pairs_hook=unique_object, parse_constant=reject_constant)
         except json.JSONDecodeError as exc:
             raise TimelineError(f"invalid JSON: {exc.msg}") from exc
+        except (RecursionError, ValueError) as exc:
+            if isinstance(exc, TimelineError):
+                raise
+            raise TimelineError("JSON exceeds supported nesting or numeric limits") from exc
+        check_json_depth(obj)
         if not isinstance(obj, dict):
             raise TimelineError("JSONL event must be an object")
         keys = [k for k in ("timestamp", "time", "ts") if k in obj]
@@ -130,9 +174,29 @@ def parse_line(raw, source, number):
     }
 
 
-def build(inputs, ignore_unmatched=False):
+def build(inputs, ignore_unmatched=False, clock_uncertainty_ms=0):
+    """Merge bytes with an optional asserted symmetric clock-error bound.
+
+    The bound is an assumption supplied by the analyst, never inferred from logs.
+    Reported intervals remain attached when adjusted intervals are requested.
+    """
+    if (isinstance(clock_uncertainty_ms, bool) or not isinstance(clock_uncertainty_ms, int)
+            or not 0 <= clock_uncertainty_ms <= 86400000):
+        raise TimelineError("clock uncertainty must be an integer from 0 to 86400000 milliseconds")
+    uncertainty = clock_uncertainty_ms * 1000
     sources, events, errors, omitted = [], [], [], []
+    total_bytes, total_lines, seen = 0, 0, set()
     for name, data in inputs:
+        if not isinstance(name, str) or not isinstance(data, bytes):
+            raise TimelineError("each source must have a text name and bytes content")
+        if name in seen:
+            raise TimelineError(f"duplicate source name: {name}")
+        seen.add(name)
+        total_bytes += len(data)
+        if len(seen) > MAX_SOURCES:
+            raise TimelineError(f"at most {MAX_SOURCES} sources are supported")
+        if len(data) > MAX_FILE_BYTES or total_bytes > MAX_TOTAL_BYTES:
+            raise TimelineError("input exceeds 8 MiB per source or 32 MiB total")
         sources.append({"source": name, "sha256": hashlib.sha256(data).hexdigest()})
         try:
             content = data.decode("utf-8-sig")
@@ -140,11 +204,16 @@ def build(inputs, ignore_unmatched=False):
             errors.append(f"{name}: invalid UTF-8 at byte {exc.start}")
             continue
         for number, physical_line in enumerate(content.split("\n"), 1):
+            total_lines += 1
+            if total_lines > MAX_LINES:
+                raise TimelineError(f"input exceeds {MAX_LINES} physical lines")
             raw = physical_line.removesuffix("\r")
+            if len(raw.encode("utf-8")) > MAX_LINE_BYTES:
+                raise TimelineError(f"{name}:{number}: line exceeds 64 KiB")
             if not raw.strip():
                 continue
             try:
-                events.append(parse_line(raw, name, number))
+                event = parse_line(raw, name, number)
             except TimelineError as exc:
                 if ignore_unmatched:
                     omitted.append({
@@ -155,6 +224,17 @@ def build(inputs, ignore_unmatched=False):
                     })
                 else:
                     errors.append(f"{name}:{number}: {exc}")
+                continue
+            if uncertainty:
+                # A failed model application is not an unmatched log line. Even
+                # --ignore-unmatched must not silently drop valid edge events.
+                start, end = checked_interval(event["_start"] - uncertainty,
+                                              event["_end"] + uncertainty)
+                event["reported_start_utc"] = event["start_utc"]
+                event["reported_end_utc_exclusive"] = event["end_utc_exclusive"]
+                event["start_utc"], event["end_utc_exclusive"] = utc_text(start), utc_text(end)
+                event["_start"], event["_end"] = start, end
+            events.append(event)
     if errors:
         raise TimelineError("\n".join(errors))
     events.sort(key=lambda e: (e["_start"], e["source"], e["line"]))
@@ -168,7 +248,42 @@ def build(inputs, ignore_unmatched=False):
         event["overlap_group"] = group
         del event["_start"]
         del event["_end"]
-    return {"version": 1, "sources": sources, "events": events, "omitted": omitted}
+    result = {"version": 1, "sources": sources, "events": events, "omitted": omitted}
+    if uncertainty:
+        result["version"] = 2
+        result["clock_model"] = {
+            "kind": "asserted_symmetric_bound",
+            "uncertainty_ms": clock_uncertainty_ms,
+            "assumption": "Each source clock differs from UTC by at most this bound at every event.",
+            "precision_assumption": "Timestamps are truncated to their displayed precision.",
+        }
+    return result
+
+
+def read_inputs(names, root=None):
+    """Read explicit regular workspace files (or stdin), enforcing byte bounds."""
+    root = Path.cwd().resolve() if root is None else Path(root).resolve()
+    inputs, total = [], 0
+    if len(names) > MAX_SOURCES:
+        raise TimelineError(f"at most {MAX_SOURCES} sources are supported")
+    for name in names:
+        limit = min(MAX_FILE_BYTES, MAX_TOTAL_BYTES - total)
+        if name == "-":
+            data = sys.stdin.buffer.read(limit + 1)
+        else:
+            path = Path(name)
+            path = (root / path).resolve() if not path.is_absolute() else path.resolve()
+            if not path.is_relative_to(root):
+                raise TimelineError(f"source resolves outside the current workspace: {name}")
+            if not stat.S_ISREG(path.stat().st_mode):
+                raise TimelineError(f"source must be a regular file: {name}")
+            with path.open("rb") as stream:
+                data = stream.read(limit + 1)
+        if len(data) > limit:
+            raise TimelineError(f"{name}: input exceeds 8 MiB per source or 32 MiB total")
+        total += len(data)
+        inputs.append((name, data))
+    return inputs
 
 
 def main(argv=None):
@@ -177,6 +292,8 @@ def main(argv=None):
     parser.add_argument("--demo", action="store_true", help="analyze two embedded example logs")
     parser.add_argument("--json", action="store_true", help="emit deterministic machine-readable JSON")
     parser.add_argument("--ignore-unmatched", action="store_true", help="explicitly omit malformed/non-event lines")
+    parser.add_argument("--clock-uncertainty-ms", type=int, default=0, metavar="MS",
+                        help="assert a symmetric clock error bound (0..86400000 ms) for every source")
     args = parser.parse_args(argv)
     if args.demo and args.files:
         parser.error("--demo cannot be combined with files")
@@ -188,15 +305,18 @@ def main(argv=None):
         inputs = (
             [(name, data.encode("utf-8")) for name, data in DEMO.items()]
             if args.demo else
-            [(name, sys.stdin.buffer.read() if name == "-" else Path(name).read_bytes()) for name in args.files]
+            read_inputs(args.files)
         )
-        result = build(inputs, args.ignore_unmatched)
+        result = build(inputs, args.ignore_unmatched, args.clock_uncertainty_ms)
     except (OSError, TimelineError) as exc:
-        print(f"time-flint: {exc}", file=sys.stderr)
+        print(f"time-flint: {visible(str(exc))}", file=sys.stderr)
         return 2
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=True))
     else:
+        if "clock_model" in result:
+            print(f"ASSUMPTION: every source clock is within ±{args.clock_uncertainty_ms} ms of UTC; "
+                  "displayed intervals include this asserted bound.")
         print("GROUP  EARLIEST UTC                  LATEST UTC (EXCLUSIVE)        SOURCE:LINE  MESSAGE")
         for event in result["events"]:
             print(f"{event['overlap_group']:>5}  {event['start_utc']:<29} {event['end_utc_exclusive']:<29} "
