@@ -1,0 +1,166 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-1/tools/paired-verdict/paired_verdict.py",
+      "--demo"
+    ],
+    "exit_code": 0,
+    "result": {
+      "paired_cases": 40,
+      "interpretation": "evidence_favors_candidate"
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-1/tools/paired-verdict/paired_verdict.py",
+      "--input",
+      "line-1/tools/paired-verdict/example.csv",
+      "--alpha",
+      "0.05"
+    ],
+    "exit_code": 0,
+    "result": {
+      "paired_cases": 3,
+      "interpretation": "insufficient_evidence_of_difference"
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-1/tools/candidate-ladder/candidate_ladder.py",
+      "--demo"
+    ],
+    "exit_code": 0,
+    "result": {
+      "paired_cases": 40,
+      "adjusted_p_values": [
+        "0.00146484375",
+        "0.21875",
+        "1"
+      ]
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-2/tools/unicode-lantern/unicode_lantern.py",
+      "--demo"
+    ],
+    "exit_code": 0,
+    "result": {
+      "finding_count": 7,
+      "assessment": "review-required"
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-3/tools/time-flint/time_flint.py",
+      "--demo",
+      "--json"
+    ],
+    "exit_code": 0,
+    "result": {
+      "overlap_groups": [
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-3/tools/time-flint/time_flint.py",
+      "--json",
+      "line-3/tools/time-flint/examples/client.txt",
+      "line-3/tools/time-flint/examples/server.jsonl"
+    ],
+    "exit_code": 0,
+    "result": {
+      "overlap_groups": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-3/tools/time-flint/time_flint.py",
+      "--clock-uncertainty-ms",
+      "750",
+      "--json",
+      "line-3/tools/time-flint/examples/client.txt",
+      "line-3/tools/time-flint/examples/server.jsonl"
+    ],
+    "exit_code": 0,
+    "result": {
+      "overlap_groups": [
+        1,
+        1
+      ]
+    }
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-4/tools/unit-flint/unit_flint.py",
+      "1.5 km + 350 m",
+      "--to",
+      "m"
+    ],
+    "exit_code": 0,
+    "result": "1850 m"
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "line-4/tools/unit-flint/unit_flint.py",
+      "10 km / 2 h",
+      "--to",
+      "m/s"
+    ],
+    "exit_code": 0,
+    "result": "25/18 m/s"
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "shared/reviewed-timeline/reviewed_timeline.py",
+      "--demo",
+      "--clock-bound",
+      "0.75 s"
+    ],
+    "exit_code": 0,
+    "result": {
+      "assessment": "review-required",
+      "clock_bound": {
+        "conversion": "exact; no rounding",
+        "expression_escaped": "0.75 s",
+        "milliseconds": 750
+      },
+      "overlap_groups": [
+        1,
+        1
+      ],
+      "message_findings": [
+        4,
+        0
+      ]
+    }
+  }
+]

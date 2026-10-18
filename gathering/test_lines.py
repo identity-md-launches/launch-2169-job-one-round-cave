@@ -1,4 +1,4 @@
-"""Additional read-only checks of Line 3 and 4; known bugs remain visible."""
+"""Additional read-only checks of Lines 3 and 4, including earlier failures."""
 import importlib.util
 from fractions import Fraction
 from pathlib import Path
@@ -44,8 +44,7 @@ class TimeChecks(unittest.TestCase):
         self.assertEqual(len(report["omitted"]), 1)
         self.assertEqual(report, t.build(data, True))
 
-    @unittest.expectedFailure
-    def test_known_calendar_overflow_should_be_validation_error(self):
+    def test_repaired_calendar_overflow_is_validation_error(self):
         with self.assertRaises(t.TimelineError):
             t.build([("a", b"9999-12-31T23:59:59Z event\n")])
 
@@ -73,8 +72,7 @@ class UnitChecks(unittest.TestCase):
         self.assertEqual(u.exact_decimal(Fraction(1, 3)), "1/3")
         self.assertEqual(u.exact_decimal(Fraction(-1, 8)), "-0.125")
 
-    @unittest.expectedFailure
-    def test_known_nesting_should_be_validation_error(self):
+    def test_repaired_nesting_is_validation_error(self):
         with self.assertRaises(u.UnitError):
             u.Parser("-" * 1100 + "1").parse()
 

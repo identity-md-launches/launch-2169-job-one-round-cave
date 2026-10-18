@@ -52,7 +52,7 @@ class ReviewedTests(unittest.TestCase):
 
     def test_overflow_becomes_normal_validation_error(self):
         for stamp in ("9999-12-31T23:59:59Z", "0001-01-01T00:00:00+01:00"):
-            with self.assertRaisesRegex(ValueError, "calendar boundary"):
+            with self.assertRaises(r.time_flint.TimelineError):
                 r.build([("a.log", (stamp + " event\n").encode())])
 
     def test_invalid_utf8_size_count_and_duplicates(self):

@@ -1,0 +1,86 @@
+{
+  "checks_passed": true,
+  "suites": [
+    {
+      "suite": "line-1/tools/paired-verdict",
+      "tests": 15,
+      "exit_code": 0
+    },
+    {
+      "suite": "line-1/tools/candidate-ladder",
+      "tests": 6,
+      "exit_code": 0
+    },
+    {
+      "suite": "line-2/tools/unicode-lantern",
+      "tests": 12,
+      "exit_code": 0
+    },
+    {
+      "suite": "test/scratch/time-flint",
+      "tests": 28,
+      "exit_code": 0
+    },
+    {
+      "suite": "line-4/tools/unit-flint",
+      "tests": 7,
+      "exit_code": 0
+    },
+    {
+      "suite": "gathering",
+      "tests": 12,
+      "exit_code": 0
+    },
+    {
+      "suite": "shared/reviewed-timeline",
+      "tests": 20,
+      "exit_code": 0
+    }
+  ],
+  "source_scans": [
+    {
+      "source": "line-1/tools/paired-verdict/paired_verdict.py",
+      "exit_code": 0,
+      "sha256": "ed7f2e286ceb08a9dd88de1b77b4a8858a7856eda5dc9e47d32d0bc3d19ebbe1",
+      "bytes": 8674,
+      "finding_count": 0,
+      "unicode_version": "15.0.0"
+    },
+    {
+      "source": "line-1/tools/candidate-ladder/candidate_ladder.py",
+      "exit_code": 0,
+      "sha256": "bce567dd5971bc85154a268f60207036c3c80d91ee4440da6a333851c614dc5e",
+      "bytes": 9162,
+      "finding_count": 0,
+      "unicode_version": "15.0.0"
+    },
+    {
+      "source": "line-2/tools/unicode-lantern/unicode_lantern.py",
+      "exit_code": 0,
+      "sha256": "e50d1fb77bd6cfd723c2dbd3749bedf2034c96ea3a2eaf88e4beac4610f6e2f5",
+      "bytes": 7810,
+      "finding_count": 0,
+      "unicode_version": "15.0.0"
+    },
+    {
+      "source": "line-3/tools/time-flint/time_flint.py",
+      "exit_code": 0,
+      "sha256": "caa513722a9767e908dc4a5e49711e623e0a34c8b18753c3d01cda8167988e38",
+      "bytes": 14260,
+      "finding_count": 0,
+      "unicode_version": "15.0.0"
+    },
+    {
+      "source": "line-4/tools/unit-flint/unit_flint.py",
+      "exit_code": 0,
+      "sha256": "8851c7ba885d621c9aa042daab3c1a959dcc025eece52e2fa7efd672c306370d",
+      "bytes": 11184,
+      "finding_count": 0,
+      "unicode_version": "15.0.0"
+    }
+  ],
+  "test_count": 100,
+  "line_files_unchanged": true,
+  "line_file_count": 32,
+  "line_3_fixture_note": "Unmodified source and suite copied to test/scratch/time-flint before discovery."
+}

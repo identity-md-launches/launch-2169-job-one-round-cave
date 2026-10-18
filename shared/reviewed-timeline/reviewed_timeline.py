@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import sys
 
-from vendor import time_flint, unicode_lantern
+from vendor import time_flint, unicode_lantern, unit_flint
 
 MAX_FILES = 8
 MAX_BYTES = unicode_lantern.MAX_BYTES
@@ -37,7 +37,23 @@ def workspace_inputs(names):
     return inputs
 
 
-def build(inputs, ignore_unmatched=False):
+def parse_clock_bound(expression):
+    """Convert an exact time quantity into the timeline's integer milliseconds."""
+    try:
+        quantity = unit_flint.Parser(expression).parse()
+    except unit_flint.UnitError as exc:
+        raise ValueError(f"clock bound at character {exc.pos + 1}: {exc}") from exc
+    if quantity.dims != (0, 0, 1, 0):
+        raise ValueError("clock bound must have time dimensions; include a unit such as ms or s")
+    milliseconds = quantity.value * 1000
+    if not 0 <= milliseconds <= 86_400_000:
+        raise ValueError("clock bound must be between 0 ms and 1 day inclusive")
+    if milliseconds.denominator != 1:
+        raise ValueError("clock bound must be an exact whole number of milliseconds; no rounding is applied")
+    return milliseconds.numerator
+
+
+def build(inputs, ignore_unmatched=False, clock_uncertainty_ms=0):
     if not 1 <= len(inputs) <= MAX_FILES:
         raise ValueError(f"supply 1..{MAX_FILES} files")
     names = [name for name, _ in inputs]
@@ -45,7 +61,7 @@ def build(inputs, ignore_unmatched=False):
         raise ValueError("source names must be unique")
     reviews = [unicode_lantern.scan(raw, name, 100) for name, raw in inputs]
     try:
-        timeline = time_flint.build(inputs, ignore_unmatched)
+        timeline = time_flint.build(inputs, ignore_unmatched, clock_uncertainty_ms)
     except (OverflowError, RecursionError) as exc:
         raise ValueError("calendar boundary or input nesting exceeds supported range") from exc
     source_map = {name: review for name, review in zip(names, reviews)}
@@ -77,7 +93,8 @@ def build(inputs, ignore_unmatched=False):
             "Message strings and source names are unicode_escape representations, not raw display text.",
             "Findings are heuristic and capped at 100 per source and per message; inspect truncated fields.",
             "Overlap groups connect uncertain intervals; presentation order is not causal order.",
-            "Clock skew, full Unicode confusables, multiline events and cross-file identifier collisions are not modeled.",
+            "A nonzero clock bound is an analyst assumption, not measured skew or a causal-order guarantee.",
+            "Full Unicode confusables, multiline events and cross-file identifier collisions are not modeled.",
         ],
     }
 
@@ -87,11 +104,19 @@ def main(argv=None):
     parser.add_argument("files", nargs="*")
     parser.add_argument("--demo", action="store_true")
     parser.add_argument("--ignore-unmatched", action="store_true")
+    parser.add_argument("--clock-bound", metavar="QUANTITY",
+                        help="assert a symmetric UTC clock-error bound, e.g. '0.75 s' (whole ms, 0..1 day)")
     args = parser.parse_args(argv)
     if args.demo and args.files:
         parser.error("--demo cannot be combined with files")
     try:
-        result = build(DEMO if args.demo else workspace_inputs(args.files), args.ignore_unmatched)
+        # Validate the asserted model before opening any input files.
+        bound = parse_clock_bound(args.clock_bound) if args.clock_bound is not None else 0
+        result = build(DEMO if args.demo else workspace_inputs(args.files), args.ignore_unmatched, bound)
+        if args.clock_bound is not None:
+            result["clock_bound"] = {"expression_escaped": unicode_lantern.escaped(args.clock_bound),
+                                     "milliseconds": bound,
+                                     "conversion": "exact; no rounding"}
     except (OSError, UnicodeError, ValueError, time_flint.TimelineError, RecursionError) as exc:
         print(json.dumps({"error": str(exc)}, ensure_ascii=True), file=sys.stderr)
         return 2

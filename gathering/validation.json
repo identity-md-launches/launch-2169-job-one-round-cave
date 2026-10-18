@@ -1,31 +1,46 @@
 {
   "structural_checks": "passed",
-  "unchanged_tracked_ancestor_files": 32,
-  "future_records": 100,
-  "numbered_records": 105,
+  "unchanged_tracked_ancestor_files": 128,
+  "future_records": 99,
+  "painted_records": 9,
+  "numbered_records": 108,
   "goals": 4,
   "wall": {
-    "path": "artifacts/gathering/wall.png",
-    "format": "PNG",
+    "path": "artifacts/gathering/wall-v2.png",
+    "alias": "artifacts/gathering/wall.png",
+    "format": "PNG RGB8",
     "width": 1254,
     "height": 1254,
-    "bytes": 3073216,
-    "sha256": "ca96f442fb86d3e9e08604a57fbe062819a816fd69c22c9396bffe168ece0af3"
+    "bytes": 3002436,
+    "sha256": "1a1d749d89e85f417a65f80b9db8b8c67e7e52d4a4c0200d15fe6de091ec3e7d"
   },
   "preview": {
-    "path": "dist/gathering/01.jpg",
+    "path": "dist/gathering/02.jpg",
     "format": "JPEG",
     "width": 512,
     "height": 512,
-    "bytes": 94523
+    "bytes": 97354
   },
-  "visual_review": "Both images opened; five digits on each visible hand; no unmet requirement observed.",
-  "visual_limits": "Visual review is not a pixel-identity or automated compliance guarantee.",
+  "source_packaging": {
+    "current_wall_alias": "wall-v2.png",
+    "alias_entry_bytes": 11,
+    "duplicate_png_bytes_removed": 3002425,
+    "declared_output_tracked": false
+  },
+  "visual_review": [
+    "Square size, rock, cracks, roots, torchlight and framing visually retained.",
+    "The ancestral seated Pepe, four ochre trails and central chalk stone remain in position.",
+    "New small ochre/chalk stones on a charcoal trail between red-ochre curves above Pepe.",
+    "Pepe retains a wide mouth and big heavy-lidded eyes; rough flat worn earth pigments.",
+    "Both visible hands counted as five digits: four fingers and one thumb each; no new hands or handprints.",
+    "No observed letters, numbers, captions, signatures, logos, watermarks, borders, frames, real people or prohibited symbols."
+  ],
+  "visual_limits": "Generative editing is visually reviewed; unchanged pixels and all visual constraints are not mechanically certified. The prompt requested four small stones; the image contains five, which does not violate a requested visual constraint.",
   "unmet_visual_requirements": [],
   "tests": {
-    "existing_passed": 27,
-    "shared_passed": 12,
-    "additional_line_passed": 10,
-    "additional_line_expected_failures": 2
+    "line_passed": 68,
+    "shared_passed": 20,
+    "additional_line_passed": 12,
+    "expected_failures": 0
   }
 }

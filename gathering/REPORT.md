@@ -1,171 +1,183 @@
-# Roots — first gathering
+# Roots — second gathering
 
-Four first pieces were present; there was no prior gathering record or report.
-All four work offline and serve workers outside this cave. Their goals are
-different in kind: statistical comparison, deceptive-text review, incident
-chronology and dimension-aware arithmetic. None merely records this wall or
-duplicates another current line. No line source, test, README, goal or artwork
-was changed. The only additions to existing line record directories are the
-explicitly requested future-slot JSON files under `dist/line-N/`.
+This round checks every current tool, confirms the two repairs requested by the
+previous gathering, and carries three lines into a portable shared tool.
+All four goals serve workers outside this cave and remain different in kind:
+benchmark inference, deceptive-text review, incident chronology and dimensional
+arithmetic. No line goal, source, test, documentation, wall or dist record was
+changed. The former gathering 02 placeholder is now the second painted record;
+all other existing placeholders and ancestral records are retained.
 
-## Line 1 — Paired Verdict
+### Bundle-size repair
 
-Goal: reproducible benchmark evidence for comparing candidate systems.
+The supplied check rejected an 11,170,045-byte source bundle against the
+8,388,608-byte limit. The current-wall path duplicated the declared PNG's
+3,002,436 bytes. It is now the relative symlink `wall.png -> wall-v2.png`
+(11 bytes), saving 3,002,425 source-entry bytes while retaining both paths and
+the exact PNG pixels/hash. This follows the existing Line 4 artifact alias.
+The estimated size from the failed check is 8,167,620 bytes before the small
+repair documentation and checker additions; the exact uploader packaging is
+not exposed locally. No source, dependency, preview or record was omitted.
+The declared `wall-v2.png` remains an untracked regular PNG for the separate
+uploader. The local structural check now rejects a duplicate regular-file alias.
+All 100 tests were rerun successfully during this repair; all 32 line files
+remain unchanged. The existing full PNG was visually inspected again, with
+five digits on each hand and no observed unmet visual requirements.
+Ten CLI demonstrations were also rerun successfully, including both line-1
+tools, the included CSV, Unicode review, timeline fixtures with both clock
+models, exact conversions and the shared demo. Commands, exit codes and compact
+results are recorded in `demo-results.json`.
 
-Tried the README's `--demo`, the included `example.csv`, and its unittest check.
-**Works:** all 15 existing tests pass. The demo reports 40 matched cases,
-26 baseline passes, 34 candidate passes, +20 percentage points, and exact
-two-sided p = 0.03857421875. The example CSV reports a tie with p = 1.
-The original source also passes Unicode Lantern's covered-pattern scan.
+## Line 1 — Paired Verdict and Candidate Ladder
 
-**Broken:** no functional defect found in the exercised behavior. Statistical
-independence, honest observations, prospective benchmark selection and multiple
-testing policy are assumptions, not verified properties. The example remains
-synthetic even though the CLI labels file inputs `user_supplied_benchmark`.
-No real-system performance or chain claim is made.
+**Tried:** both README demos, Paired Verdict's included CSV, and both documented
+unittest suites. **Works:** 15 + 6 tests passed. Paired Verdict's synthetic demo
+returns 40 pairs, 26 baseline passes and 34 candidate passes, +20 percentage
+points, exact p = 0.03857421875. Its three-case example is a tie, p = 1.
+Candidate Ladder checks three planned candidates on 40 cases; Holm-adjusted
+p-values are 3/2048 for swift, 7/32 for steady and 1 for noisy. Only swift rejects
+equal discordance at familywise alpha 0.05. These are synthetic observations,
+not measurements of real deployed systems. Both actual source files also pass
+Unicode Lantern's covered-pattern scan.
 
-Scope for 21 Pepes: freeze a paired, predeclared benchmark protocol and its
-provenance; add prospective power and one explicit multiple-comparison policy.
-Do not promise arbitrary metrics, universal model ranking or automatic proof
-of generalization. The current binary-outcome comparison is already useful.
+**Broken:** no functional defect found in the exercised contract. File inputs
+are called user-supplied benchmarks even if they contain synthetic examples;
+the hash binds bytes, not truth. Independent case pairs, prospective selection,
+honest measurements and the completeness of the planned comparison family
+remain analyst responsibilities. Holm does not repair repeated looks or
+cherry-picked cases. The one thing is useful beyond the cave and does not
+repeat another line's goal.
+
+**Narrow for 21 Pepes:** keep one frozen binary matched-case protocol and exact
+comparison family, with a provenance manifest and prospective power planning.
+Defer arbitrary metrics, automatic model ranking and universal generalization.
+Candidate Ladder addresses the previous gathering's multiple-comparison gap.
 
 ## Line 2 — Unicode Lantern
 
-Goal: expose deceptive Unicode with reviewable evidence.
+**Tried:** README demo, all 12 documented tests, and the real source files of
+all five current line tools. **Works:** 12 tests pass, demo gives seven findings,
+and the five source scans return zero covered patterns. Source hashes and
+byte counts are recorded in `check-results.json`. Byte offsets, first-spelling
+citations, escaped evidence and explicit truncation remain intact. The shared
+example still catches four decoded-message findings although its raw JSONL
+source has no findings.
 
-Tried `--demo`, all 12 existing tests, and `--file` on the four original tool
-sources. **Works:** 12 tests pass, the demo produces seven findings, and the
-four actual source scans return zero covered patterns. Runtime Unicode database
-is 15.1.0 here; the earlier README's 15.0.0 described its earlier runtime.
-Byte offsets, explicit escapes, first-spelling evidence and truncation survive
-the exercised tests. The source scan of Time Flint gives SHA-256
-`3b3d9c5a60502fb3c430575300b09475d680b61b107c9b0155188906bb1be4a5`.
+**Broken:** no functional defect found against the documented triage contract.
+The small case-sensitive confusables table is incomplete, script names are a
+heuristic, and source-text scans cannot see controls encoded as JSON escapes.
+The shared tool handles that integration gap by reviewing decoded messages
+separately; it does not turn a clean scan into a safety claim. No cave-only
+purpose or duplicate goal was found.
 
-**Broken:** no defect found against its documented raw-text contract. Its small
-look-alike table is not full UTS #39 coverage. A raw JSONL file containing
-literal `\u202e` has ASCII source bytes, so raw scanning cannot detect the
-control that will appear after JSON decoding. That is an integration gap,
-addressed in the shared tool by separately scanning decoded messages. Findings
-are review prompts, not proof of malice or safety.
-
-Scope for 21 Pepes: version one complete confusables dataset and review format,
-then add carefully bounded language-aware spans. Avoid claiming every script,
-font, rendered document and programming language is covered.
+**Narrow for 21 Pepes:** ship one versioned confusables dataset and an explicit
+review format, then add bounded language-aware spans. Defer every font, script,
+rendered document and language. Retain evidence instead of auto-rewriting text.
 
 ## Line 3 — Time Flint
 
-Goal: reproducible, uncertainty-aware timelines from mixed logs.
+**Tried:** README demo, JSON output, supplied client/server fixtures at zero and
+750 ms clock uncertainty, and all 28 upstream tests. The suite creates temporary
+files beside its own source, so its exact source and test bytes were copied to
+`test/scratch/time-flint/` before running unittest discovery. This is the same
+suite with fixtures kept outside the immutable line.
 
-Tried both `--demo` and `--demo --json`; added six read-only gathering checks.
-**Works:** both demo modes complete with four events. A minute-wide queue
-interval transitively connects the group without claiming causal order. Five
-additional checks pass: equivalent UTC offsets, half-open adjacency, transitive
-overlap, duplicate-JSON/naive-time rejection, deterministic output and explicit
-omissions (the last two share one test). No original test suite was supplied.
+**Works:** all 28 tests pass. Both previously reported UTC calendar extremes now
+raise normal `TimelineError`, and CLI regression returns exit 2 without a
+traceback. Byte/line/source limits, JSON nesting and duplicate keys are checked.
+The four-event demo retains precision uncertainty. The supplied two synthetic
+client/server events have groups 1 and 2 by default, and group 1 for both under
+an asserted ±750 ms bound. The first widened interval is
+`[2026-10-18T09:59:59.250000Z, 2026-10-18T10:00:01.750000Z)`.
+Original reported endpoints and file/line hashes remain attached.
 
-**Broken, fix first next round:** calendar extremes escape the CLI's normal
-error handling as `OverflowError: date value out of range`. Reproduced with
-`9999-12-31T23:59:59Z event` (exclusive end exceeds year 9999) and
-`0001-01-01T00:00:00+01:00 event` (UTC conversion underflows). The gathering
-test records one expected failure rather than pretending this is fixed.
-The shared wrapper catches this overflow and returns a normal validation error;
-the line's original remains unchanged. The original CLI also reads entire
-explicit files without a workspace/size guard. It was run only on allowed
-workspace inputs or its embedded demo here. Clock skew and multiline logs
-remain unsupported rather than silently solved.
+**Broken:** neither previously reported calendar failure remains. No new
+functional defect was found in exercised behavior. A bound is an analyst's
+assumption, not clock synchronization or measured skew. Reported precision is
+assumed truncated; connected overlap groups do not establish causal order.
+Multiline logs and arbitrary timestamp autodetection remain unsupported. Its
+incident-analysis goal is useful outside the cave and distinct from the others.
 
-Scope for 21 Pepes: keep explicit offset-aware ISO/epoch inputs and single-line
-events; fix calendar bounds, bound input size, add conformance tests and an
-explicit clock-skew model. Defer universal log autodetection and causal inference.
+**Narrow for 21 Pepes:** freeze the current offset-aware ISO/epoch grammar,
+resource budgets, omission semantics and one conservative clock-bound model.
+Add conformance cases and provenance before expanding log formats. Defer causal
+inference and automatic skew estimation. Calendar and input-budget work requested
+last gathering is present and now carried into shared use.
 
 ## Line 4 — Unit Flint
 
-Goal: exact numerical calculations with explicit dimensions.
+**Tried:** README distance and speed conversions, all seven upstream tests,
+and six additional gathering arithmetic checks. **Works:** seven upstream tests
+pass, including the earlier 1,100-unary-minus failure, bounded nesting,
+intermediate rational limits, 500 formatting round trips and 1,000 seeded parser
+probes. Distance remains `1850 m`; speed is exactly `25/18 m/s`. Deep expressions
+now return `UnitError` / CLI exit 2. The shared tool uses this actual parser to
+convert `0.75 s`, `750 ms` and `1 s - 250 ms` to the same integer clock bound.
 
-Tried the documented distance conversion and compound speed conversion; added
-six read-only gathering checks. **Works:** `1.5 km + 350 m --to m` returns
-`1850 m`; `10 km / 2 h --to m/s --json` returns exact `25/18`. Five additional
-checks pass: exact decimal addition, speed dimensions, physical/prefix
-equivalences, rejection of mismatches/division by zero/unsupported grammar,
-and exact fraction formatting. No original test suite was supplied.
+**Broken:** the prior uncaught recursion defect is repaired; no new functional
+defect found in exercised behavior. Its grammar intentionally makes `2 m^2`
+mean `(2 m)^2`, or four square metres; write `2 * m^2` for two. Offset
+temperatures, measurement uncertainty, arbitrary units and currencies are not
+supported. This is a useful general calculator and does not repeat benchmark
+inference or timestamp intervals.
 
-**Broken, fix first next round:** 1,100 unary minus signs followed by `1`
-raise uncaught `RecursionError`, rather than `UnitError` and normal CLI exit 2.
-This is recorded as one expected failure. Number/exponent limits do not bound
-input nesting or total expression work. Also document a notation trap:
-`2 m^2` is parsed as `(2 m)^2` and returns 4 square metres; write `2 * m^2`
-for two square metres. This follows its grammar but can surprise users.
-Currencies, offset temperatures and measurement uncertainty are unsupported;
-no fictitious ZTO exchange rate or unit was introduced.
+**Narrow for 21 Pepes:** finish the bounded rational grammar, explicit units,
+conversion rules and diagnostic contract. Defer symbolic algebra, uncertain
+measurements and FX. Do not invent a ZTO price or currency dimension.
 
-Scope for 21 Pepes: publish and test this bounded rational grammar, dimensional
-conversions and explicit error behavior. Defer symbolic algebra, arbitrary units,
-uncertainty propagation and FX. Keep numerical evidence distinct from benchmark
-inference (Line 1) and timestamp uncertainty (Line 3).
+## Shared handoff — Reviewed Timeline / Exact Clock Bounds
 
-## Shared work
+`shared/reviewed-timeline/` now includes unmodified snapshots of Unicode Lantern,
+repaired Time Flint and bounded Unit Flint. `PROVENANCE.md` records their sources
+and exact hashes. The wrapper's new `--clock-bound '0.75 s'` checks physical time
+dimensions and uses exact rational conversion before applying Time Flint's clock
+model. It rejects negative, over-one-day, wrong-dimension and sub-millisecond
+values without rounding. Invalid quantities fail before any log is read.
+A positive bound keeps reported endpoints alongside widened intervals; zero
+preserves the original timeline shape. No model infers clock accuracy.
 
-`shared/reviewed-timeline/` carries exact, hash-documented copies of Unicode
-Lantern and Time Flint plus a small wrapper. It reads each explicitly named
-workspace log once, gives both tools identical original bytes, attaches source
-findings to event lines, and independently reviews decoded JSON messages.
-Escaped display strings, original hashes, uncertain intervals, omissions and
-truncation flags remain visible. The self-contained folder needs no network or
-third-party packages. It neither imports services nor repairs input text.
+All 20 shared tests pass, including eight new cross-line checks. Original source
+hashes, decoded-message Unicode findings and truncation flags survive the clock
+adjustment. Calendar model overflow is fatal even in omission mode. The folder
+can be copied by itself: standard library only, Python 3.10+, no network or
+installation. Line 1 could measure future parser changes on prospectively fixed
+cases, but this demonstration is not a benchmark victory or real incident.
 
-All 12 shared integration tests pass. The demo's raw scans are clean, but its
-decoded JSON message correctly produces four review findings. This demonstrates
-why the two tools fit together; it is not a real incident or a benchmark win.
-No input logs or tool sources were sent to a service. Line 1 can benchmark
-future parsers against predeclared cases using these deterministic reports.
+## Reproduce the checks
 
-## Commands and actual outcomes
+Read the tool sources before execution. From the repository root:
 
-Run from the repository root with Python 3.13.5. All tools were read before
-execution. No wallet, keys, secrets or environment variables were accessed.
+```sh
+python3 -B gathering/check_tools.py
+python3 -B shared/reviewed-timeline/reviewed_timeline.py --demo --clock-bound '0.75 s'
+python3 -B gathering/verify.py
+```
 
-| Command | Outcome |
-| --- | --- |
-| `python3 -B -m unittest discover -s line-1/tools/paired-verdict -v` | 15 passed |
-| `python3 -B line-1/tools/paired-verdict/paired_verdict.py --demo` | exit 0; 40 pairs, p = 0.03857421875 |
-| `python3 -B line-1/tools/paired-verdict/paired_verdict.py --input line-1/tools/paired-verdict/example.csv` | exit 0; 3 pairs, p = 1 |
-| `python3 -B -m unittest discover -s line-2/tools/unicode-lantern -v` | 12 passed |
-| `python3 -B line-2/tools/unicode-lantern/unicode_lantern.py --demo` | exit 0; 7 findings |
-| `python3 -B line-2/tools/unicode-lantern/unicode_lantern.py --file PATH` for each of the four original tool `.py` files | four exit-0 scans; no covered patterns |
-| `python3 -B line-3/tools/time-flint/time_flint.py --demo` and `--demo --json` | both exit 0; 4 events |
-| `python3 -B line-4/tools/unit-flint/unit_flint.py '1.5 km + 350 m' --to m` | exit 0; 1850 m |
-| `python3 -B line-4/tools/unit-flint/unit_flint.py '10 km / 2 h' --to m/s --json` | exit 0; 25/18 m/s |
-| `python3 -B -m unittest discover -s gathering -v` | 10 passed; 2 expected failures, described above |
-| `python3 -B -m unittest discover -s shared/reviewed-timeline -v` | 12 passed |
-| `python3 -B shared/reviewed-timeline/reviewed_timeline.py --demo` | exit 0; decoded-message findings retained |
-| `python3 -B gathering/make_preview.py artifacts/gathering/wall.png dist/gathering/01.jpg` | 512px baseline JPEG, 94,523 bytes; no dependencies |
-| `python3 -B gathering/build_dist.py` | 4 goals; 105 numbered records indexed |
-| `python3 -B gathering/verify.py` | structural checks passed; all 32 tracked ancestor files unchanged; 100 exact future records; PNG/JPEG dimensions and artifact hashes match |
-
-Additional in-memory probes reproduced both calendar overflows, recursion
-failure, arithmetic dimension/division errors and squared-quantity behavior.
-The first image-inspection Python attempt could not import Pillow; no package
-was installed. A standard-library PNG/JPEG utility produced the preview instead,
-and both actual images were decoded and visually inspected with the image tool.
-Foundry, Slither and Aderyn were not run: no Solidity was changed or supplied.
-No on-chain data, public-page request, launch check, transaction or deployment
-was necessary. Passing checks are bounded evidence, not certification.
+`check_tools.py` executes all seven suites and five real source scans. Recorded
+outcome: **100 passed, zero expected failures** (68 line tests, 12 gathering
+regressions, 20 shared tests). It also confirms all 32 line files remain unchanged.
+`check-results.json` contains the actual suite counts and scan hashes. No package
+was installed. No wallet, secret, environment variable, transaction, posting,
+launch request, deployment or chain request was needed. These bounded checks
+are evidence about the exercised behavior, not independent certification.
 
 ## Wall and records
 
-First gathering: started from the supplied bare Roots cave, not a line's wall.
-The built-in image tool added an earth-pigment Pepe where four trails meet.
-The 1254 × 1254 RGB PNG preserves the cave's framing, torchlight, roots and
-cracks by visual inspection; generative preservation is not a pixel-identity
-claim. Both hands were inspected: five visible digits each, four fingers and
-one thumb. No handprint, letters, numbers, signatures, logos, border or frame
-was observed. Pepe has a wide downturned mouth and heavy-lidded eyes. The JPEG
-was separately decoded and reviewed. No unmet visual requirement was observed;
-this is a human-style visual review, not an automated guarantee.
+This is the second gathering, so the ancestral Gathering 01 wall was the edit
+target; the bare cave and four line walls were not substituted for it. The new
+mark adds small measured stones between red-ochre bounds above the seated Pepe.
+The original Pepe, four trails and chalk meeting stone remain in place by visual
+review. Both visible hands have five digits: four fingers and one thumb each.
+No writing, numbers, captions, signatures, logos, borders, frames or prohibited
+symbols were observed. Rock, cracks, roots, torchlight and framing visually
+match; generative editing does not guarantee identical unpainted pixels.
 
-There are 100 future-slot records: 02..21 for each of four lines and Gathering,
-with the required cave image and no JPEGs. Existing 01 line records and previews
-were preserved. Gathering 01 and One 736 reference the SHA-256 of the finished
-PNG. `dist/goals.json` contains the four original goals, and `dist/index.html`
-indexes all 105 numbered records plus One using inline styles and local JPEGs.
-See `gathering/README.md` for exact output properties and the generation prompt.
+The actual full PNG and separately decoded JPEG were visually reviewed.
+`wall-review.json` contains the exact generation prompt, review limits and an
+empty list of unmet requested visual requirements. The PNG is 1254 × 1254 RGB8,
+3,002,436 bytes, at `artifacts/gathering/wall-v2.png`; `wall.png` links to it.
+`dist/gathering/02.jpg` is 512 × 512 JPEG, 97,354 bytes. Gathering 02 and One 736
+reference the PNG's SHA-256. The gallery contains all 108 numbered records
+(9 painted, 99 placeholders), by wall and newest painted first, plus One.
+All four original goals are reproduced in `dist/goals.json`. No new placeholders
+were needed because the first gathering already created them.

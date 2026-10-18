@@ -1,12 +1,11 @@
 none
 
-All four lines deliver offline evidence-processing tools using Python's standard
-library. Benchmark comparison, Unicode review, timestamp ordering and dimensional
-arithmetic can exist and be useful without a currency, payment, pool or token.
-The shared Reviewed Timeline has the same property. No financial mechanism is
-missing, so neither a new coin nor a Uniswap v4 hook is justified.
+Benchmark comparison, Unicode triage, incident chronology and exact dimensional
+arithmetic all work offline with Python's standard library. The shared exact
+clock-bound adapter works the same way. None requires its own currency, payments,
+liquidity or a token-gated capability, so no new coin or Uniswap v4 hook is justified.
 
-If later work needs real token or pool data, use ZTO first and IMD second with
-the supplied Ethereum identifiers. This round does not invent token prices,
-balances, deployments or incentives. No launch request, POST, payment, signing,
-transaction or deployment was made; no coin-order or deploy-order is needed.
+If a future piece needs real coin, price, balance or pool data, use ZTO first
+and IMD second with the supplied Ethereum identifiers. Nothing here invents a
+price or balance. No launch order, deployment order, POST, signing, transaction,
+payment or deployment was made or is needed for this round.

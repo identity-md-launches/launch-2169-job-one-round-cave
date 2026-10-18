@@ -1,78 +1,74 @@
-# Where Four Trails Meet
+# The Measured Shelter
 
-The first gathering checks four independent worker tools and leaves
-**Reviewed Timeline**, a portable combination of Unicode Lantern and Time Flint.
-Run its offline demo from the repository root:
+The second gathering confirms the earlier line repairs and improves
+**Reviewed Timeline / Exact Clock Bounds**. It combines Unicode review, incident
+timelines and exact unit arithmetic without changing any line files.
 
 ```sh
-python3 -B shared/reviewed-timeline/reviewed_timeline.py --demo
+python3 -B shared/reviewed-timeline/reviewed_timeline.py --demo --clock-bound '0.75 s'
 ```
 
-`REPORT.md` records what was tried for every line, what passed, the two remaining
-upstream failures, scope recommendations and shared-tool semantics. `COINS.md`
-says none: offline analysis requires no new coin. No line source was changed.
+This offline, standard-library-only demo converts an exact time quantity,
+records the asserted clock model, and preserves the four Unicode findings in
+a decoded JSON message. It is synthetic; the bound is an analyst assumption.
+See [REPORT.md](REPORT.md) for every line's results and scope recommendations,
+and [the shared README](../shared/reviewed-timeline/README.md) for use and limits.
+`COINS.md` says none: no new coin is needed.
 
-## Delivered images
+## Delivered images and review
 
-| Path | Format | Dimensions | Size |
+| Path | Format | Dimensions | Bytes |
 | --- | --- | --- | --- |
-| `artifacts/gathering/wall.png` | RGB8 PNG | 1254 × 1254 | 3,073,216 bytes |
-| `dist/gathering/01.jpg` | baseline RGB-color JPEG (YCbCr encoding) | 512 × 512 | 94,523 bytes |
+| `artifacts/gathering/wall-v2.png` | RGB8 PNG | 1254 × 1254 | 3,002,436 |
+| `artifacts/gathering/wall.png` | relative symlink to `wall-v2.png` | same image | 11-byte link |
+| `dist/gathering/02.jpg` | baseline JPEG | 512 × 512 | 97,354 |
 
-PNG SHA-256:
-`ca96f442fb86d3e9e08604a57fbe062819a816fd69c22c9396bffe168ece0af3`.
-The numbered Gathering record and `dist/one.json` use its artifact URL.
+PNG SHA-256: `1a1d749d89e85f417a65f80b9db8b8c67e7e52d4a4c0200d15fe6de091ec3e7d`.
+Gathering 02 and One 736 use its artifact URL. The specifically declared upload
+is `artifacts/gathering/wall-v2.png`, left untracked for the artifact uploader.
+The existing Gathering 01 record and preview are preserved.
 
-Visual review: both actual images were opened with the image inspection tool.
-Pepe is a rough ochre/charcoal cave figure with heavy-lidded eyes and a wide
-downturned mouth. Both visible hands have five digits: four fingers and one
-thumb. Warm rock, edge roots, cracks, lighting and framing visually match the
-input cave. Earth pigments only; no observed writing, numbers, signature,
-watermark, border, frame, real person or prohibited symbol. No unmet visual
-requirement was observed. The generative edit is visually reviewed, not a
-claim that all unpainted pixels are bit-identical or that software can certify
-visual compliance. No ancestral gathering mark existed to preserve.
+The bundle-size repair replaces the duplicate `wall.png` bytes with the relative
+symlink `wall.png -> wall-v2.png`, matching the existing Line 4 alias pattern.
+The declared upload remains a regular PNG with its original hash, and the JPEG,
+records and all tool sources are preserved. The alias resolves after the named
+output is delivered beside it. This removes 3,002,425 source-entry bytes.
+Applied to the reported failed bundle size, the estimate is 8,167,620 bytes
+before these small documentation/check changes, below 8,388,608 bytes; the
+uploader's exact archive calculation is not available locally.
+`verify.py` checks the relative alias, actual PNG bytes and untracked upload so a
+second full PNG copy cannot silently return to this source entry.
 
-Built-in `image_gen` edit mode was used with the supplied bare cave as its only
-edit target. No CLI/API fallback, key, installed dependency or extra saved
-workspace image was used. Final prompt:
+Built-in `image_gen` edit mode used the previous gathering wall as the target.
+The exact final prompt and chosen visual review are recorded in
+[wall-review.json](wall-review.json). The addition is a small trail of stones
+between two ochre curves above Pepe, representing a shared uncertainty bound.
+The generated full image and JPEG were inspected: five digits on each existing
+hand, four fingers and a thumb; no new hands or stencils; earth pigments and
+original rock/framing retained by visual review. No unmet requested visual
+requirement was observed. Pixel identity is not guaranteed by generative editing.
+The prompt requested four small stones and the image has five; stone count is
+not a task constraint. No extra preview or intermediate image was saved here.
 
-> Use case: precise-object-edit. Edit target: the provided bare cave wall,
-> square 1254 by 1254 pixels. Preserve exactly its size, framing, warm rock,
-> roots at the edges, cracks, light, bare stone and floor; add only pigment
-> marks on the central wall. This is the first gathering mark in a prehistoric
-> cave. Main figure: a clearly recognizable Pepe the frog as a simple Lascaux
-> cave figure, heavy-lidded big paired eyes and wide downturned mouth, rounded
-> frog head, charcoal stick outlines, red and yellow ochre body with bare stone
-> showing through. A seated Pepe in the center carefully joins four winding
-> ochre trails arriving from four directions into one small glowing chalk-white
-> stone at his feet: the meeting of four crafts, checking evidence together.
-> Keep it spare and handmade, rough and slightly worn, flat pigment rubbed
-> onto this exact rock, not a rendered character. Pepe has two visible open
-> hands held to the sides of his body, each drawn with exactly FIVE distinct
-> digits, FOUR fingers and ONE thumb, count carefully; no hand stencils.
-> Earth pigments only, charcoal black, chalk white, red and yellow ochre.
-> No text of any kind, no letters, numbers, captions, signatures, logos,
-> watermarks, political symbols, borders, frames, photographs, 3D renders or
-> real people. Preserve the original cave surface and all its natural features.
-
-## Rebuilding derived files
-
-No image library was available. `make_preview.py` uses only the standard
-library to decode this noninterlaced RGB8 PNG and encode a 512px baseline JPEG,
-with bilinear resizing, DCT, quantization and canonical Huffman codes. It checks
-PNG chunk CRCs and lowers quality to keep the preview below 100,000 bytes.
-It is deliberately a small build utility, not a general-purpose image codec.
+## Rebuild and check
 
 ```sh
-python3 -B gathering/make_preview.py artifacts/gathering/wall.png dist/gathering/01.jpg
+python3 -B gathering/check_tools.py > gathering/check-results.json
+python3 -B gathering/make_preview.py artifacts/gathering/wall-v2.png dist/gathering/02.jpg
 python3 -B gathering/build_dist.py
 python3 -B gathering/verify.py
 ```
 
-The gallery builder reads the four goals and existing JSON records and embeds
-its styles in one HTML page. It does not generate art, replace records, or fetch
-anything. Open `dist/index.html` directly; previews work offline. Full-resolution
-artifact links require network access. Future slots have no image files and
-are listed newest slot first inside each wall's expandable section. Painted
-records are likewise newest first. One appears as the lead wall and record link.
+Observed: 100 checks pass, zero expected failures, five current tool-source scans
+find no covered Unicode patterns. Line 3's unchanged suite is copied to
+`test/scratch/` before execution so its temporary fixtures do not touch line
+folders. Check results, structural validation and visual review are distinct.
+
+`make_preview.py` decodes noninterlaced RGB8 PNG and creates a 512px baseline
+JPEG with Python's standard library, reducing quality until below 100,000 bytes.
+It is a bounded build utility, not a general image codec. `build_dist.py` reads
+all existing records and four goals; it does not replace line records.
+Open `dist/index.html` directly. The page has inline styles and local JPEG
+previews; full-resolution artifact links need network access. All 108 numbered
+records appear, with 99 still-unpainted slots retained and painted work newest
+first within each wall. None of the tools needs an installed dependency.

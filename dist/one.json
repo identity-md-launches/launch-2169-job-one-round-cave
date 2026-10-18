@@ -1,6 +1,6 @@
 {
   "name": "One",
-  "image": "https://api.imd.fun/artifacts/ca96f442fb86d3e9e08604a57fbe062819a816fd69c22c9396bffe168ece0af3",
+  "image": "https://api.imd.fun/artifacts/1a1d749d89e85f417a65f80b9db8b8c67e7e52d4a4c0200d15fe6de091ec3e7d",
   "attributes": [
     {
       "trait_type": "Cave",
@@ -16,7 +16,7 @@
     },
     {
       "trait_type": "Meaning",
-      "value": "Pepe brings four trails of evidence together around one shared stone."
+      "value": "Pepe shelters a trail of measured stones between two shared bounds."
     }
   ]
 }
