@@ -15,6 +15,11 @@ import sys
 # Base dimensions: length, mass, time, data. Factors are exact base units.
 Dimensions = tuple[int, int, int, int]
 ZERO: Dimensions = (0, 0, 0, 0)
+MAX_SOURCE = 4096
+MAX_TOKENS = 256
+MAX_DEPTH = 32
+MAX_BITS = 2048
+MAX_DIMENSION = 256
 
 
 def unit(factor: str, dims: Dimensions) -> tuple[Fraction, Dimensions]:
@@ -74,12 +79,16 @@ class UnitError(Exception):
 
 
 def tokenize(source: str) -> list[Token]:
+    if len(source) > MAX_SOURCE:
+        raise UnitError(f"expression exceeds {MAX_SOURCE} characters", MAX_SOURCE)
     tokens: list[Token] = []
     i = 0
     while i < len(source):
         if source[i].isspace():
             i += 1
             continue
+        if len(tokens) >= MAX_TOKENS:
+            raise UnitError(f"expression exceeds {MAX_TOKENS} tokens", i)
         match = NUMBER.match(source, i) or IDENT.match(source, i)
         if match:
             kind = "number" if NUMBER.fullmatch(match.group()) else "unit"
@@ -111,6 +120,15 @@ class Parser:
         self.tokens = tokenize(source)
         self.i = 0
         self.target = target
+        self.depth = 0
+
+    @staticmethod
+    def bounded(q: Quantity, pos: int) -> Quantity:
+        if max(q.value.numerator.bit_length(), q.value.denominator.bit_length()) > MAX_BITS:
+            raise UnitError(f"exact value exceeds {MAX_BITS}-bit arithmetic budget", pos)
+        if any(abs(d) > MAX_DIMENSION for d in q.dims):
+            raise UnitError(f"dimension exceeds range -{MAX_DIMENSION}..{MAX_DIMENSION}", pos)
+        return q
 
     @property
     def here(self) -> Token:
@@ -141,7 +159,8 @@ class Parser:
                     f"incompatible dimensions: {dimensions(left.dims)} and {dimensions(right.dims)}",
                     op.pos,
                 )
-            left = Quantity(left.value + (right.value if op.kind == "+" else -right.value), left.dims)
+            left = self.bounded(Quantity(
+                left.value + (right.value if op.kind == "+" else -right.value), left.dims), op.pos)
         return left
 
     def multiply(self) -> Quantity:
@@ -158,9 +177,19 @@ class Parser:
                     raise UnitError("division by zero", op.pos)
                 left = Quantity(left.value / right.value,
                                 tuple(a - b for a, b in zip(left.dims, right.dims)))
+            left = self.bounded(left, op.pos)
         return left
 
     def unary(self) -> Quantity:
+        if self.depth >= MAX_DEPTH:
+            raise UnitError(f"expression nesting exceeds {MAX_DEPTH} levels", self.here.pos)
+        self.depth += 1
+        try:
+            return self._unary()
+        finally:
+            self.depth -= 1
+
+    def _unary(self) -> Quantity:
         if self.here.kind in ("+", "-"):
             op = self.here
             self.i += 1
@@ -181,7 +210,7 @@ class Parser:
                 raise UnitError("exponent exceeds the supported range -12..12", op.pos)
             if q.value == 0 and n < 0:
                 raise UnitError("zero cannot have a negative exponent", op.pos)
-            return Quantity(q.value ** n, tuple(d * n for d in q.dims))
+            return self.bounded(Quantity(q.value ** n, tuple(d * n for d in q.dims)), op.pos)
         return q
 
     def atom(self) -> Quantity:
@@ -196,6 +225,8 @@ class Parser:
                 raise UnitError("number is too long", token.pos)
             try:
                 number = Decimal(token.text)
+                if abs(number.as_tuple().exponent) > 200:
+                    raise UnitError("decimal exponent exceeds range -200..200", token.pos)
                 if abs(number.adjusted()) > 100:
                     raise UnitError("number magnitude exceeds 10^100", token.pos)
                 value = Fraction(number)
@@ -258,7 +289,7 @@ def main(argv: list[str] | None = None) -> int:
                     f"target dimension {dimensions(target.dims)} does not match result {dimensions(result.dims)}",
                     0,
                 )
-            value = result.value / target.value
+            value = Parser.bounded(Quantity(result.value / target.value, result.dims), 0).value
             label = args.to
         else:
             value = result.value
